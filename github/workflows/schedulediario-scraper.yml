@@ -54,9 +54,9 @@ jobs:
         run: chrome --version
 
       - name: Run scraper (headless)
-        env:
-          FECHA_BASE: '04/12/2025'
-          DOWNLOAD_DIR: ${{ github.workspace }}/downloads
+        #env:
+        #  FECHA_BASE: '04/12/2025'
+        #  DOWNLOAD_DIR: ${{ github.workspace }}/downloads
           
         run: |
           mkdir -p "$DOWNLOAD_DIR"
