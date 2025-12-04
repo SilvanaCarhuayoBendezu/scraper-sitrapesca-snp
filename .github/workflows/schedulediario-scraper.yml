@@ -1,0 +1,97 @@
+name: Scraper Diario to Azure Blob
+
+# Ejecucion de Descargas Diarias (Last 3 days)
+on:
+  schedule:
+    - cron: "0 14 * * *"
+    - cron: "0 17 * * *"
+    - cron: "0 20 * * *"
+    - cron: "0 23 * * *"
+  workflow_dispatch: {}
+
+
+permissions:
+  contents: read
+
+
+jobs:
+  run-scraper:
+    runs-on: ubuntu-latest
+    env:
+      TZ: America/Lima
+      DOWNLOAD_DIR: ${{ github.workspace }}/downloads
+      AZURE_STORAGE_ACCOUNT: ${{ secrets.AZURE_STORAGE_ACCOUNT }}
+      AZURE_STORAGE_CONTAINER: ${{ secrets.AZURE_STORAGE_CONTAINER }}
+      AZURE_STORAGE_KEY: ${{ secrets.AZURE_STORAGE_KEY }}
+
+
+      # Credenciales del portal (SITRAPESCA)
+      CRED1_RAZON: ${{ secrets.CRED1_RAZON }}
+      CRED1_RUC:   ${{ secrets.CRED1_RUC }}
+      CRED1_PASS:  ${{ secrets.CRED1_PASS }}
+      CRED2_RAZON: ${{ secrets.CRED2_RAZON }}
+      CRED2_RUC:   ${{ secrets.CRED2_RUC }}
+      CRED2_PASS:  ${{ secrets.CRED2_PASS }}
+      CRED3_RAZON: ${{ secrets.CRED3_RAZON }}
+      CRED3_RUC:   ${{ secrets.CRED3_RUC }}
+      CRED3_PASS:  ${{ secrets.CRED3_PASS }}
+
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+
+      - name: Install deps
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+
+      - name: Setup Chrome
+        uses: browser-actions/setup-chrome@v1
+
+
+      - name: Show Chrome version
+        run: chrome --version
+
+
+      - name: Run scraper (headless)
+        #env:
+        #  FECHA_BASE: '20/05/2025'
+        #  DOWNLOAD_DIR: ${{ github.workspace }}/downloads
+          
+        run: |
+          mkdir -p "$DOWNLOAD_DIR"
+          python descargadiaria_app.py
+          echo "Archivos descargados:"
+          ls -lah "$DOWNLOAD_DIR" || true
+
+
+      - name: Upload to Azure Blob (account key)
+        run: |
+          # Prefijo por fecha en Lima para particionar
+          PREFIX=$(date +'%Y/%m/%d/%H%M')
+          echo "Subiendo a contenedor: $AZURE_STORAGE_CONTAINER, prefijo: $PREFIX"
+          az storage blob upload-batch \
+            --account-name "$AZURE_STORAGE_ACCOUNT" \
+            --account-key "$AZURE_STORAGE_KEY" \
+            --destination "$AZURE_STORAGE_CONTAINER/$PREFIX" \
+            --source "$DOWNLOAD_DIR" \
+            --no-progress
+
+
+      - name: Upload downloads as artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: sitrap-descarga
+          path: downloads/
+          if-no-files-found: warn
+          retention-days: 7
