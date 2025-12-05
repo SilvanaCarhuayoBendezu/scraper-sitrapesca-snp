@@ -3,12 +3,12 @@ name: Scraper Diario to Azure Blob
 # Ejecucion de Descargas Diarias (Last 3 days)
 on:
   schedule:
-    - cron: "0 14 * * *"
-    - cron: "0 17 * * *"
-    - cron: "0 20 * * *"
-    - cron: "0 23 * * *"
-    - cron: "0 1 * * *"   
-    - cron: "0 4 * * *"   
+    - cron: "0 13 * * *"    # 8AM
+    - cron: "0 16 * * *"    # 11AM
+    - cron: "0 19 * * *"    # 2PM
+    - cron: "0 22 * * *"    # 5PM
+    - cron: "0 1 * * *"     # 8PM
+
   workflow_dispatch: {}
 
 
