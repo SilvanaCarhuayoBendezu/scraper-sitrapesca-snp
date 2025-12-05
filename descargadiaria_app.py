@@ -246,7 +246,7 @@ def run_sitrap_with_retries(razon, ruc, pwd, card_index, expected_files, max_att
         try:
             run_sitrap_once(razon, ruc, pwd, card_index)
         except Exception as e:
-            print(f"Intento {attempt} falló con error: {e}")
+            print(f"Intento {attempt} falló con error: {e} para {razon}")
             continue  # pasa al siguiente intento
 
         # Esperar las descargas
