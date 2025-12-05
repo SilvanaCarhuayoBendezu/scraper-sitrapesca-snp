@@ -64,22 +64,12 @@ jobs:
       - name: Show Chrome version
         run: chrome --version
 
-# Intentos si el scrapper no encuentra algún objeto
-
-      - name: Run scraper (headless) with retry
-        #env:
-        #  FECHA_BASE: '01/12/2025'
-        #  DOWNLOAD_DIR: ${{ github.workspace }}/downloads
-        uses: nick-fields/retry@v3
-        with:
-          max_attempts: 5          # hasta 5 intentos
-          retry_on: error          # reintenta si el comando sale con código != 0
-          timeout_minutes: 5      # tiempo máx por intento (ajustar si el scraper demora más)
-          command: |
-            mkdir -p "$DOWNLOAD_DIR"
-            python descargadiaria_app.py
-            echo "Archivos descargados:"
-            ls -lah "$DOWNLOAD_DIR" || true
+      - name: Run scraper (headless)
+        run: |
+          mkdir -p "$DOWNLOAD_DIR"
+          python descargadiaria_app.py
+          echo "Archivos descargados:"
+          ls -lah "$DOWNLOAD_DIR" || true
 
 
       - name: Upload to Azure Blob (account key)
