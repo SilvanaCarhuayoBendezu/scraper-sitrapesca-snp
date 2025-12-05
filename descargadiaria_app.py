@@ -223,7 +223,7 @@ def run_sitrap_once(razon_social_val, ruc_val, clave_val, card_index):
         boton.click()
 
         # Espera base para que el servidor genere los reportes
-        time.sleep(10)
+        time.sleep(35)
 
     except (TimeoutException, NoSuchElementException) as e:
         # Lanzamos la excepción hacia arriba para que el caller sepa que falló este intento
