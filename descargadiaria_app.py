@@ -125,7 +125,7 @@ def run_sitrap(razon_social_val, ruc_val, clave_val, card_index):
     boton = WebDriverWait(driver, 10).until(EC.element_to_be_clickable((By.CSS_SELECTOR, "button[data-bind='click: fnVerReporte']")))
     boton.click()
 
-    time.sleep(30)  # espera básica; si quieres, reemplaza por espera activa del archivo
+    time.sleep(40)  # espera básica; tiempo de espera para descargas del servidor de 3 días
     driver.quit()
 
 if __name__ == "__main__":
