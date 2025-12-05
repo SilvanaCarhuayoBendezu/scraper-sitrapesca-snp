@@ -19,7 +19,7 @@ if fecha_base:
     fecha_inicio = (datetime.strptime(fecha_base, "%d/%m/%Y") - timedelta(days=3)).strftime("%d/%m/%Y") + " 00:00"
     fecha_fin = datetime.strptime(fecha_base, "%d/%m/%Y").strftime("%d/%m/%Y") + " " + str(datetime.now().hour) + ":" + f"{datetime.now().minute:02d}" 
 else:
-    fecha_inicio = (datetime.now(LIMA) - timedelta(days=3)).strftime("%d/%m/%Y") + " 00:00"
+    fecha_inicio = (datetime.now(LIMA) - timedelta(days=2)).strftime("%d/%m/%Y") + " 00:00"
     fecha_fin = datetime.now(LIMA).strftime("%d/%m/%Y") + " " + str(datetime.now().hour) + ":" + f"{datetime.now().minute:02d}" 
 
 print(fecha_inicio, "-", fecha_fin)
