@@ -73,7 +73,7 @@ jobs:
         with:
           max_attempts: 5          # hasta 5 intentos
           retry_on: error          # reintenta si el comando sale con código != 0
-          timeout_minutes: 20      # tiempo máx por intento (ajusta si tu scraper demora más)
+          timeout_minutes: 5      # tiempo máx por intento (ajustar si el scraper demora más)
           command: |
             mkdir -p "$DOWNLOAD_DIR"
             python descargadiaria_app.py
