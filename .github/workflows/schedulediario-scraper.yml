@@ -19,7 +19,7 @@ permissions:
 jobs:
   run-scraper:
     runs-on: ubuntu-latest
-    timeout-minutes: 15    # Aumentar el límite global del JOB
+    timeout-minutes: 10    # Aumentar el límite global del JOB
     env:
       TZ: America/Lima
       DOWNLOAD_DIR: ${{ github.workspace }}/downloads
